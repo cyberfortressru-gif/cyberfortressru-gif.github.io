@@ -1,0 +1,100 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Твоя Цифровая Крепость: Защити Себя в Онлайн!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Твоя Цифровая Крепость</h1>
+        <p>Защити себя в мире онлайн!</p>
+    </header>
+
+    <nav id="main-nav">
+        <!-- Основное меню будет скрыто до прохождения теста, или будет иметь только общие ссылки -->
+        <a href="#resources" class="nav-link">Полезные ресурсы</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#about" class="nav-link">О нас</a>
+    </nav>
+
+    <main>
+        <section id="hero-section">
+            <h2>Добро пожаловать!</h2>
+            <p>Узнай, как обеспечить свою кибербезопасность и защитить данные.</p>
+            <button id="start-quiz-btn">Пройди тест и узнай, как защититься!</button>
+        </section>
+
+        <section id="quiz-container" style="display: none;">
+            <!-- Здесь будут вопросы теста, которые будут генерироваться JS -->
+            <div class="quiz-header">
+                <h2>Определи свой уровень кибербезопасности</h2>
+                <button id="back-btn" type="button">Назад</button>
+            </div>
+            <div id="quiz-questions"></div>
+            <div class="quiz-controls">
+                <button id="submit-quiz-btn" style="display: none;">Завершить тест</button>
+            </div>
+        </section>
+
+        <!-- Разделы контента, которые будут показываться после теста -->
+        <div id="content-sections" style="display: none;">
+            <section id="basic-security" class="content-section" data-link="sections/basic/basic-security.html">
+                <h2>Основы кибербезопасности для начинающих</h2>
+                <!-- Здесь будет базовый контент -->
+            </section>
+            <section id="advanced-security" class="content-section" data-link="sections/advanced/advanced-security.html">
+                <h2>Продвинутая защита в сети</h2>
+                <!-- Здесь будет продвинутый контент -->
+            </section>
+            <section id="social-media-safety" class="content-section" data-link="sections/social/social-media-safety.html">
+                <h2>Безопасность в социальных сетях</h2>
+                <!-- Контент для соцсетей -->
+            </section>
+            <section id="gamer-security" class="content-section" data-link="sections/gamer/gamer-security.html">
+                <h2>Кибербезопасность для геймеров</h2>
+                <!-- Контент для геймеров -->
+            </section>
+            <section id="parental-control" class="content-section" data-link="sections/parental/parental-control.html">
+                <h2>Родительский контроль и защита детей в сети</h2>
+                <!-- Контент для родителей -->
+            </section>
+            <section id="student-digital-hygiene" class="content-section" data-link="sections/student/student-digital-hygiene.html">
+                <h2>Цифровая гигиена для студентов</h2>
+                <!-- Контент для студентов -->
+            </section>
+            <section id="career-in-cyber" class="content-section" data-link="sections/career/career-in-cyber.html">
+                <h2>Карьера в кибербезопасности</h2>
+                <!-- Контент о карьере -->
+            </section>
+            <!-- Добавь другие специализированные секции по аналогии -->
+        </div>
+
+        <div id="post-quiz-actions" class="post-quiz-actions" style="display: none;">
+            <button id="retake-quiz-btn" type="button">Пройти тест заново</button>
+        </div>
+
+        <section id="resources" class="content-section" data-link="sections/resources/resources.html">
+            <h2>Полезные ресурсы</h2>
+            <!-- Здесь будет список ссылок -->
+        </section>
+        <section id="faq" class="content-section" data-link="sections/faq/faq.html">
+            <h2>FAQ: Ответы на частые вопросы</h2>
+            <!-- Здесь будут вопросы и ответы -->
+        </section>
+        <section id="about" class="content-section" data-link="sections/about/about.html">
+            <h2>О нас</h2>
+            <p>Информация об авторе проекта и целях.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Твоя Цифровая Крепость. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
