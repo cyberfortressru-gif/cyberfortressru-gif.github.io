@@ -7,6 +7,17 @@ const backBtn = document.getElementById('back-btn');
 const contentSections = document.getElementById('content-sections');
 const postQuizActions = document.getElementById('post-quiz-actions');
 const retakeQuizBtn = document.getElementById('retake-quiz-btn');
+const quizProgress = document.getElementById('quiz-progress');
+const progressFill = quizProgress ? quizProgress.querySelector('.progress-fill') : null;
+const progressText = quizProgress ? quizProgress.querySelector('.progress-text') : null;
+const quizResultsModal = document.getElementById('quiz-results-modal');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalContinueBtn = document.getElementById('modal-continue-btn');
+const resultIcon = document.getElementById('result-icon');
+const resultTitle = document.getElementById('result-title');
+const resultScore = document.getElementById('result-score');
+const resultJudgment = document.getElementById('result-judgment');
+const resultDetails = document.getElementById('result-details');
 
 const QUIZ_RESULTS_KEY = 'digitalFortressQuizResults';
 
@@ -150,7 +161,25 @@ function launchQuiz() {
         });
     }
 
+    if (quizProgress) {
+        quizProgress.style.display = 'flex';
+        updateProgress();
+    }
+
     renderQuestions();
+}
+
+function updateProgress() {
+    if (!progressFill || !progressText || !quizQuestions) {
+        return;
+    }
+
+    const total = quizQuestions.length;
+    const answered = answeredQuestions.size;
+    const percentage = total > 0 ? (answered / total) * 100 : 0;
+
+    progressFill.style.width = `${percentage}%`;
+    progressText.textContent = `${answered} / ${total}`;
 }
 
 if (startQuizBtn) {
@@ -185,6 +214,10 @@ if (backBtn) {
 
         if (quizQuestionsBlock) {
             quizQuestionsBlock.innerHTML = '';
+        }
+
+        if (quizProgress) {
+            quizProgress.style.display = 'none';
         }
 
         if (contentSections) {
@@ -269,12 +302,153 @@ if (submitQuizBtn) {
             heroSection.setAttribute('aria-hidden', 'true');
         }
 
+        const result = analyzeQuizResults(userAnswers);
+        showQuizResults(result);
+
         displayRelevantContent(userAnswers);
 
         try {
             localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(userAnswers));
         } catch (storageError) {
             console.error('Не удалось сохранить результаты теста', storageError);
+        }
+    });
+}
+
+function analyzeQuizResults(answers) {
+    let score = 0;
+    let maxScore = 0;
+    const details = [];
+
+    const age = answers.age || 0;
+    const socialMediaUsage = answers['social-media-usage'] || '';
+    const twoFactorKnowledge = answers['2fa-knowledge'] || '';
+    const gamingInterest = answers['gaming-interest'] || '';
+    const parentalHelp = answers['parental-help'] || '';
+
+    maxScore = 5;
+
+    if (age >= 15) {
+        score += 1;
+        details.push('Твой возраст говорит о том, что ты можешь освоить более продвинутые методы защиты');
+    } else {
+        details.push('Начни с основ — это поможет заложить крепкий фундамент знаний');
+    }
+
+    if (twoFactorKnowledge === 'yes') {
+        score += 1;
+        details.push('Отлично, что знаешь о двухфакторной аутентификации!');
+    } else if (twoFactorKnowledge === 'what_is_it') {
+        score += 0.5;
+        details.push('2FA — важный инструмент защиты, стоит изучить его подробнее');
+    } else {
+        details.push('Двухфакторная аутентификация значительно повышает безопасность аккаунтов');
+    }
+
+    if (socialMediaUsage === 'rarely' || socialMediaUsage === 'sometimes') {
+        score += 1;
+        details.push('Умеренное использование соцсетей снижает риски');
+    } else if (socialMediaUsage === 'often' || socialMediaUsage === 'constantly') {
+        score += 0.5;
+        details.push('Активное использование соцсетей требует особого внимания к настройкам приватности');
+    }
+
+    if (gamingInterest === 'yes' || gamingInterest === 'a_little') {
+        score += 0.5;
+        details.push('Игровые аккаунты нуждаются в защите — не забывай об этом');
+    }
+
+    if (parentalHelp === 'yes') {
+        score += 1;
+        details.push('Забота о безопасности детей — это важно и ответственно');
+    }
+
+    const percentage = Math.round((score / maxScore) * 100);
+
+    let level, judgment, iconClass, iconEmoji;
+
+    if (percentage >= 80) {
+        level = 'Отлично';
+        iconClass = 'excellent';
+        iconEmoji = '🛡️';
+        judgment = 'Ты уже обладаешь хорошими знаниями о кибербезопасности! Продолжай изучать новые методы защиты и оставайся в курсе актуальных угроз.';
+    } else if (percentage >= 60) {
+        level = 'Хорошо';
+        iconClass = 'good';
+        iconEmoji = '👍';
+        judgment = 'У тебя есть базовые знания, но есть куда расти. Изучи материалы на сайте, чтобы усилить свою защиту в интернете.';
+    } else if (percentage >= 40) {
+        level = 'Средне';
+        iconClass = 'average';
+        iconEmoji = '📚';
+        judgment = 'Есть понимание основ, но стоит углубить знания. Начни с базовых разделов и постепенно переходи к более сложным темам.';
+    } else {
+        level = 'Требуется улучшение';
+        iconClass = 'needs-improvement';
+        iconEmoji = '🔒';
+        judgment = 'Не переживай! Каждый эксперт когда-то начинал с нуля. Изучи материалы на сайте, начни с основ и постепенно повышай свой уровень защиты.';
+    }
+
+    return {
+        score: percentage,
+        level,
+        judgment,
+        iconClass,
+        iconEmoji,
+        details
+    };
+}
+
+function showQuizResults(result) {
+    if (!quizResultsModal || !resultIcon || !resultScore || !resultJudgment || !resultDetails) {
+        return;
+    }
+
+    resultIcon.className = `result-icon ${result.iconClass}`;
+    resultIcon.textContent = result.iconEmoji;
+
+    resultScore.textContent = `${result.score}%`;
+
+    resultJudgment.textContent = result.judgment;
+
+    let detailsHTML = '<h3>Рекомендации:</h3><ul>';
+    result.details.forEach(detail => {
+        detailsHTML += `<li>${detail}</li>`;
+    });
+    detailsHTML += '</ul>';
+    resultDetails.innerHTML = detailsHTML;
+
+    quizResultsModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeQuizResults() {
+    if (!quizResultsModal) {
+        return;
+    }
+
+    quizResultsModal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeQuizResults);
+}
+
+if (modalContinueBtn) {
+    modalContinueBtn.addEventListener('click', closeQuizResults);
+}
+
+if (quizResultsModal) {
+    quizResultsModal.addEventListener('click', (e) => {
+        if (e.target === quizResultsModal) {
+            closeQuizResults();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && quizResultsModal.classList.contains('show')) {
+            closeQuizResults();
         }
     });
 }
@@ -403,11 +577,19 @@ function handleAnswer(questionIndex) {
     }
 
     answeredQuestions.add(questionIndex);
+    updateProgress();
 
     const nextIndex = questionIndex + 1;
 
     if (questionElements[nextIndex]) {
         revealQuestion(nextIndex);
+    } else if (submitQuizBtn) {
+        submitQuizBtn.style.display = 'inline-flex';
+        submitQuizBtn.style.opacity = '0';
+        requestAnimationFrame(() => {
+            submitQuizBtn.style.transition = 'opacity 0.5s ease';
+            submitQuizBtn.style.opacity = '1';
+        });
     }
 }
 
