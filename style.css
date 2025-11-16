@@ -42,6 +42,8 @@ body {
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body::before {
@@ -490,17 +492,24 @@ button svg {
 }
 
 #content-sections {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     scroll-margin-top: 2rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 #content-sections .content-section {
-    width: min(90%, 800px);
+    width: 100%;
     margin-bottom: 0;
     cursor: pointer;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .content-section.is-clickable {
@@ -559,18 +568,12 @@ button svg {
 }
 
 .content-section.visible {
-    margin-bottom: 2.2rem;
     animation: slideInUp 0.6s ease-out;
 }
 
-.content-section.pull-left {
-    align-self: flex-start;
-    margin-left: 5%;
-}
-
+.content-section.pull-left,
 .content-section.pull-right {
-    align-self: flex-end;
-    margin-right: 5%;
+    /* Классы больше не используются, все секции в сетке */
 }
 
 .quiz-question {
@@ -1185,44 +1188,315 @@ body.content-page .article-content li {
     }
 }
 
-#content-sections .content-section:nth-child(odd) {
-    align-self: flex-start;
-    margin-left: 5%;
-}
-
-#content-sections .content-section:nth-child(even) {
-    align-self: flex-end;
-    margin-right: 5%;
-}
+/* Секции теперь в grid, выравнивание не нужно */
 
 @media (max-width: 768px) {
     h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
-    #hero-section h2 {
-        font-size: 2rem;
+    header {
+        padding: 2rem 1rem 1.5rem;
+        margin: 0 0.5rem 1.5rem;
+        border-radius: 0 0 30px 30px;
     }
     
-    button {
-        padding: 1rem 2rem;
-        font-size: 0.9rem;
-    }
-    
-    section {
-        padding: 2rem 1.5rem;
-        border-radius: 24px;
+    header p {
+        font-size: 1rem;
     }
     
     nav#main-nav {
         flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+        margin: 0 0.5rem 1.5rem;
+    }
+    
+    nav#main-nav .nav-link {
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+    }
+    
+    main {
+        padding: 1.5rem 1rem 3rem;
+        gap: 2rem;
+    }
+    
+    #hero-section {
+        padding: 2.5rem 1.5rem;
+    }
+    
+    #hero-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    #hero-section p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    button {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    section {
+        padding: 1.5rem 1.25rem;
+        border-radius: 20px;
+        width: 100% !important;
+        max-width: 100%;
+    }
+    
+    h2 {
+        font-size: 1.6rem;
+    }
+    
+    #content-sections {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0;
+        width: 100%;
+    }
+    
+    #content-sections .content-section {
+        width: 100% !important;
+        max-width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .content-section.is-clickable h2 {
+        padding-right: 0;
+        font-size: 1.5rem;
+    }
+    
+    .content-section.is-clickable h2 svg {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+    
+    .quiz-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    
+    .quiz-header h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    #back-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .quiz-progress {
+        flex-direction: column;
         gap: 0.75rem;
     }
     
-    .content-section.pull-left,
-    .content-section.pull-right {
-        margin-left: 0;
-        margin-right: 0;
-        align-self: center;
+    .progress-text {
+        text-align: center;
+        min-width: auto;
+    }
+    
+    .quiz-question {
+        padding: 1.5rem 1.25rem;
+    }
+    
+    .quiz-question h3 {
+        font-size: 1.2rem;
+    }
+    
+    .quiz-option {
+        padding: 0.85rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .quiz-controls {
+        justify-content: center;
+    }
+    
+    #submit-quiz-btn {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .modal-content {
+        max-width: 95%;
+        margin: 1rem;
+        border-radius: 24px;
+    }
+    
+    .modal-header {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .result-icon {
+        width: 4.5rem;
+        height: 4.5rem;
+        font-size: 2.2rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .result-score {
+        font-size: 3rem;
+    }
+    
+    .result-judgment {
+        font-size: 1.1rem;
+    }
+    
+    .knowledge-gaps,
+    .result-details,
+    .materials-notice {
+        padding: 1.25rem;
+    }
+    
+    .modal-footer {
+        padding: 1.5rem 1.25rem;
+        flex-direction: column;
+    }
+    
+    .modal-button {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem 2rem;
+    }
+    
+    footer {
+        padding: 1.5rem 1rem 2rem;
+        margin-top: 2rem;
+    }
+    
+    body.content-page .content-page-header {
+        padding: 2rem 1.5rem 1.5rem;
+        margin: 0 0.5rem 1.5rem;
+    }
+    
+    body.content-page .article-content {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+    }
+    
+    body.content-page .article-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    body.content-page .article-content h3 {
+        font-size: 1.4rem;
+    }
+    
+    body.content-page .article-content p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    #content-sections {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    header {
+        padding: 1.5rem 0.75rem 1.25rem;
+        margin: 0 0.25rem 1rem;
+    }
+    
+    nav#main-nav {
+        margin: 0 0.25rem 1rem;
+        padding: 0.75rem;
+    }
+    
+    main {
+        padding: 1rem 0.5rem 2rem;
+    }
+    
+    #hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    #hero-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    #hero-section p {
+        font-size: 1rem;
+    }
+    
+    section {
+        padding: 1.25rem 1rem;
+    }
+    
+    h2 {
+        font-size: 1.4rem;
+    }
+    
+    #content-sections {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        padding: 0;
+    }
+    
+    .modal-content {
+        max-width: 98%;
+        margin: 0.5rem;
+        border-radius: 20px;
+    }
+    
+    .modal-header {
+        padding: 1.5rem 1rem 1rem;
+    }
+    
+    .modal-body {
+        padding: 1.25rem 1rem;
+    }
+    
+    .result-score {
+        font-size: 2.5rem;
+    }
+    
+    .quiz-question input[type="number"],
+    .quiz-question select {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .post-quiz-actions {
+        margin: 1.5rem 0 2rem;
+    }
+    
+    .post-quiz-actions button {
+        width: 100%;
+    }
+    
+    body.content-page .back-link {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    body.content-page .article-content ul {
+        padding-left: 1.5rem;
+    }
+    
+    body.content-page .article-content li {
+        font-size: 0.95rem;
     }
 }

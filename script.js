@@ -862,13 +862,7 @@ function displayRelevantContent(answers) {
         }
     });
 
-    orderedVisible.forEach((section, idx) => {
-        if (idx % 2 === 0) {
-            section.classList.add('pull-left');
-        } else {
-            section.classList.add('pull-right');
-        }
-    });
+    // Секции теперь в grid layout, классы pull-left/pull-right не нужны
 
     if (postQuizActions) {
         postQuizActions.style.display = 'flex';
