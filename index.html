@@ -28,6 +28,7 @@
 
     <nav id="main-nav">
         <!-- Основное меню будет скрыто до прохождения теста, или будет иметь только общие ссылки -->
+        <a href="materials.html" class="nav-link">📚 Материалы</a>
         <a href="#resources" class="nav-link">Полезные ресурсы</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <a href="#about" class="nav-link">О нас</a>
@@ -214,14 +215,26 @@
             <div class="modal-body">
                 <div class="result-score" id="result-score"></div>
                 <p class="result-judgment" id="result-judgment"></p>
+                <div class="result-analysis" id="result-analysis"></div>
                 <div class="result-details" id="result-details"></div>
+                <div class="materials-notice" id="materials-notice">
+                    <p>✨ <strong>Хорошая новость!</strong> Мы уже подобрали для тебя все необходимые материалы на основе твоих ответов. Они ждут тебя ниже!</p>
+                </div>
             </div>
             <div class="modal-footer">
-                <button id="modal-continue-btn" class="modal-button">
+                <button id="modal-materials-btn" class="modal-button modal-button-primary">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                     </svg>
-                    Продолжить
+                    Изучить материалы
+                </button>
+                <button id="modal-home-btn" class="modal-button modal-button-secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    На главную
                 </button>
             </div>
         </div>

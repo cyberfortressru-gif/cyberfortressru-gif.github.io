@@ -17,7 +17,10 @@ const resultIcon = document.getElementById('result-icon');
 const resultTitle = document.getElementById('result-title');
 const resultScore = document.getElementById('result-score');
 const resultJudgment = document.getElementById('result-judgment');
+const resultAnalysis = document.getElementById('result-analysis');
 const resultDetails = document.getElementById('result-details');
+const modalMaterialsBtn = document.getElementById('modal-materials-btn');
+const modalHomeBtn = document.getElementById('modal-home-btn');
 
 const QUIZ_RESULTS_KEY = 'digitalFortressQuizResults';
 
@@ -116,6 +119,59 @@ const quizQuestions = [
         options: [
             { text: 'Да', value: 'yes' },
             { text: 'Нет', value: 'no' }
+        ]
+    },
+    {
+        question: 'Как часто ты обновляешь операционную систему и приложения?',
+        type: 'radio',
+        name: 'update-frequency',
+        options: [
+            { text: 'Автоматически', value: 'auto' },
+            { text: 'Регулярно вручную', value: 'regular' },
+            { text: 'Иногда', value: 'sometimes' },
+            { text: 'Редко или никогда', value: 'rarely' }
+        ]
+    },
+    {
+        question: 'Используешь ли ты один и тот же пароль для разных сервисов?',
+        type: 'radio',
+        name: 'password-reuse',
+        options: [
+            { text: 'Да, один пароль везде', value: 'same' },
+            { text: 'Несколько паролей для разных сервисов', value: 'few' },
+            { text: 'Уникальный пароль для каждого сервиса', value: 'unique' },
+            { text: 'Использую менеджер паролей', value: 'manager' }
+        ]
+    },
+    {
+        question: 'Как ты обычно проверяешь безопасность ссылок перед переходом?',
+        type: 'radio',
+        name: 'link-checking',
+        options: [
+            { text: 'Всегда проверяю адрес', value: 'always' },
+            { text: 'Иногда проверяю', value: 'sometimes' },
+            { text: 'Перехожу без проверки', value: 'never' },
+            { text: 'Не знаю, как проверять', value: 'dont-know' }
+        ]
+    },
+    {
+        question: 'Ты студент или планируешь поступать в вуз?',
+        type: 'radio',
+        name: 'student-status',
+        options: [
+            { text: 'Да, я студент', value: 'yes' },
+            { text: 'Планирую поступать', value: 'planning' },
+            { text: 'Нет', value: 'no' }
+        ]
+    },
+    {
+        question: 'Интересуешься ли ты карьерой в сфере кибербезопасности?',
+        type: 'radio',
+        name: 'career-interest',
+        options: [
+            { text: 'Да, очень интересно', value: 'very' },
+            { text: 'Интересно, но не уверен', value: 'maybe' },
+            { text: 'Не интересно', value: 'no' }
         ]
     }
 ];
@@ -319,20 +375,27 @@ function analyzeQuizResults(answers) {
     let score = 0;
     let maxScore = 0;
     const details = [];
+    const knowledgeGaps = [];
 
     const age = answers.age || 0;
     const socialMediaUsage = answers['social-media-usage'] || '';
     const twoFactorKnowledge = answers['2fa-knowledge'] || '';
     const gamingInterest = answers['gaming-interest'] || '';
     const parentalHelp = answers['parental-help'] || '';
+    const updateFrequency = answers['update-frequency'] || '';
+    const passwordReuse = answers['password-reuse'] || '';
+    const linkChecking = answers['link-checking'] || '';
+    const studentStatus = answers['student-status'] || '';
+    const careerInterest = answers['career-interest'] || '';
 
-    maxScore = 5;
+    maxScore = 10;
 
     if (age >= 15) {
         score += 1;
         details.push('Твой возраст говорит о том, что ты можешь освоить более продвинутые методы защиты');
     } else {
         details.push('Начни с основ — это поможет заложить крепкий фундамент знаний');
+        knowledgeGaps.push('Основы кибербезопасности для начинающих');
     }
 
     if (twoFactorKnowledge === 'yes') {
@@ -341,8 +404,10 @@ function analyzeQuizResults(answers) {
     } else if (twoFactorKnowledge === 'what_is_it') {
         score += 0.5;
         details.push('2FA — важный инструмент защиты, стоит изучить его подробнее');
+        knowledgeGaps.push('Двухфакторная аутентификация (2FA)');
     } else {
         details.push('Двухфакторная аутентификация значительно повышает безопасность аккаунтов');
+        knowledgeGaps.push('Двухфакторная аутентификация (2FA)');
     }
 
     if (socialMediaUsage === 'rarely' || socialMediaUsage === 'sometimes') {
@@ -351,16 +416,68 @@ function analyzeQuizResults(answers) {
     } else if (socialMediaUsage === 'often' || socialMediaUsage === 'constantly') {
         score += 0.5;
         details.push('Активное использование соцсетей требует особого внимания к настройкам приватности');
+        knowledgeGaps.push('Безопасность в социальных сетях');
     }
 
     if (gamingInterest === 'yes' || gamingInterest === 'a_little') {
         score += 0.5;
         details.push('Игровые аккаунты нуждаются в защите — не забывай об этом');
+        knowledgeGaps.push('Кибербезопасность для геймеров');
     }
 
     if (parentalHelp === 'yes') {
         score += 1;
         details.push('Забота о безопасности детей — это важно и ответственно');
+        knowledgeGaps.push('Родительский контроль и защита детей');
+    }
+
+    if (updateFrequency === 'auto' || updateFrequency === 'regular') {
+        score += 1;
+        details.push('Отлично, что регулярно обновляешь систему и приложения!');
+    } else if (updateFrequency === 'sometimes') {
+        score += 0.5;
+        details.push('Регулярные обновления закрывают уязвимости — стоит делать это чаще');
+        knowledgeGaps.push('Важность обновлений');
+    } else {
+        details.push('Обновления критически важны для безопасности — не пропускай их');
+        knowledgeGaps.push('Важность обновлений');
+    }
+
+    if (passwordReuse === 'manager') {
+        score += 1;
+        details.push('Менеджер паролей — отличный выбор для безопасности!');
+    } else if (passwordReuse === 'unique') {
+        score += 0.8;
+        details.push('Уникальные пароли для каждого сервиса — это хорошо!');
+    } else if (passwordReuse === 'few') {
+        score += 0.4;
+        details.push('Попробуй использовать менеджер паролей для лучшей защиты');
+        knowledgeGaps.push('Создание надёжных паролей');
+    } else {
+        details.push('Один пароль для всех сервисов — большой риск. Изучи основы создания паролей');
+        knowledgeGaps.push('Создание надёжных паролей');
+    }
+
+    if (linkChecking === 'always') {
+        score += 1;
+        details.push('Проверка ссылок перед переходом — отличная привычка!');
+    } else if (linkChecking === 'sometimes') {
+        score += 0.5;
+        details.push('Старайся всегда проверять ссылки перед переходом');
+        knowledgeGaps.push('Безопасная работа со ссылками');
+    } else {
+        details.push('Проверка ссылок помогает избежать фишинга — это важно');
+        knowledgeGaps.push('Безопасная работа со ссылками');
+    }
+
+    if (studentStatus === 'yes' || studentStatus === 'planning') {
+        score += 0.5;
+        details.push('Студентам особенно важно следить за цифровой гигиеной');
+    }
+
+    if (careerInterest === 'very' || careerInterest === 'maybe') {
+        score += 0.5;
+        details.push('Кибербезопасность — перспективная сфера для карьеры!');
     }
 
     const percentage = Math.round((score / maxScore) * 100);
@@ -395,12 +512,13 @@ function analyzeQuizResults(answers) {
         judgment,
         iconClass,
         iconEmoji,
-        details
+        details,
+        knowledgeGaps
     };
 }
 
 function showQuizResults(result) {
-    if (!quizResultsModal || !resultIcon || !resultScore || !resultJudgment || !resultDetails) {
+    if (!quizResultsModal || !resultIcon || !resultScore || !resultJudgment || !resultDetails || !resultAnalysis) {
         return;
     }
 
@@ -411,7 +529,19 @@ function showQuizResults(result) {
 
     resultJudgment.textContent = result.judgment;
 
-    let detailsHTML = '<h3>Рекомендации:</h3><ul>';
+    let analysisHTML = '';
+    if (result.knowledgeGaps && result.knowledgeGaps.length > 0) {
+        analysisHTML = '<div class="knowledge-gaps"><h3>📖 Что нужно подтянуть:</h3><ul>';
+        result.knowledgeGaps.forEach(gap => {
+            analysisHTML += `<li>${gap}</li>`;
+        });
+        analysisHTML += '</ul></div>';
+    } else {
+        analysisHTML = '<div class="knowledge-gaps"><h3>🎉 Отлично!</h3><p>Ты уже хорошо разбираешься в основах кибербезопасности. Продолжай изучать продвинутые темы!</p></div>';
+    }
+    resultAnalysis.innerHTML = analysisHTML;
+
+    let detailsHTML = '<h3>💡 Рекомендации:</h3><ul>';
     result.details.forEach(detail => {
         detailsHTML += `<li>${detail}</li>`;
     });
@@ -437,6 +567,60 @@ if (modalCloseBtn) {
 
 if (modalContinueBtn) {
     modalContinueBtn.addEventListener('click', closeQuizResults);
+}
+
+if (modalMaterialsBtn) {
+    modalMaterialsBtn.addEventListener('click', () => {
+        closeQuizResults();
+        
+        // Прокручиваем к секциям контента, которые подходят пользователю
+        if (contentSections && contentSections.style.display !== 'none') {
+            setTimeout(() => {
+                contentSections.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                // Добавляем визуальный эффект для привлечения внимания
+                contentSections.style.animation = 'pulse 1s ease-in-out';
+                setTimeout(() => {
+                    contentSections.style.animation = '';
+                }, 1000);
+            }, 300);
+        } else {
+            // Если секции еще не показаны, показываем их и прокручиваем
+            if (contentSections) {
+                contentSections.style.display = 'block';
+                contentSections.classList.remove('hidden');
+                contentSections.classList.add('visible');
+                
+                // Загружаем сохраненные результаты, если они есть
+                try {
+                    const savedResults = localStorage.getItem(QUIZ_RESULTS_KEY);
+                    if (savedResults) {
+                        const answers = JSON.parse(savedResults);
+                        displayRelevantContent(answers);
+                    }
+                } catch (e) {
+                    console.error('Ошибка загрузки сохраненных результатов', e);
+                }
+                
+                setTimeout(() => {
+                    contentSections.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }, 100);
+            }
+        }
+    });
+}
+
+if (modalHomeBtn) {
+    modalHomeBtn.addEventListener('click', () => {
+        closeQuizResults();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
 if (quizResultsModal) {
@@ -617,6 +801,11 @@ function displayRelevantContent(answers) {
     const socialUsage = answers['social-media-usage'];
     const gamingInterest = answers['gaming-interest'];
     const parentalHelp = answers['parental-help'];
+    const updateFrequency = answers['update-frequency'];
+    const passwordReuse = answers['password-reuse'];
+    const linkChecking = answers['link-checking'];
+    const studentStatus = answers['student-status'];
+    const careerInterest = answers['career-interest'];
 
     if (!Number.isNaN(age) && age >= 15) {
         sectionsToShow.add('advanced-security');
@@ -642,12 +831,16 @@ function displayRelevantContent(answers) {
         sectionsToShow.add('parental-control');
     }
 
-    if (!Number.isNaN(age) && age >= 16 && age <= 25) {
+    if (studentStatus === 'yes' || studentStatus === 'planning' || (!Number.isNaN(age) && age >= 16 && age <= 25)) {
         sectionsToShow.add('student-digital-hygiene');
     }
 
-    if (!Number.isNaN(age) && age >= 18) {
+    if (careerInterest === 'very' || careerInterest === 'maybe' || (!Number.isNaN(age) && age >= 18)) {
         sectionsToShow.add('career-in-cyber');
+    }
+
+    if (updateFrequency === 'rarely' || updateFrequency === 'sometimes' || passwordReuse === 'same' || passwordReuse === 'few' || linkChecking === 'never' || linkChecking === 'dont-know') {
+        sectionsToShow.add('basic-security');
     }
 
     if (!sectionsToShow.has('advanced-security') && !sectionsToShow.has('basic-security')) {
