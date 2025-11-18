@@ -1242,6 +1242,22 @@ body.content-page .article-content li {
         max-width: 100%;
     }
     
+    #start-quiz-btn {
+        font-size: 0.8rem;
+        padding: 0.85rem 1.2rem;
+        white-space: normal !important;
+        line-height: 1.4;
+        min-height: auto;
+        word-wrap: break-word;
+        text-align: center;
+    }
+    
+    #start-quiz-btn svg {
+        flex-shrink: 0;
+        width: 1.1em;
+        height: 1.1em;
+    }
+    
     section {
         padding: 1.5rem 1.25rem;
         border-radius: 20px;
@@ -1438,6 +1454,21 @@ body.content-page .article-content li {
     
     #hero-section p {
         font-size: 1rem;
+    }
+    
+    #start-quiz-btn {
+        font-size: 0.75rem;
+        padding: 0.8rem 1rem;
+        white-space: normal !important;
+        line-height: 1.5;
+        gap: 0.5rem;
+        word-wrap: break-word;
+        text-align: center;
+    }
+    
+    #start-quiz-btn svg {
+        width: 1em;
+        height: 1em;
     }
     
     section {
